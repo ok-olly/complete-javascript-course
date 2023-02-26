@@ -111,3 +111,25 @@ console.log(stateDeepClone);
 if (module.hot) {
   module.hot.accept();
 }
+
+class Person {
+  #greeting = 'Hey';
+  constructor(name) {
+    this.name = name;
+    console.log(`${this.#greeting}, ${this.name}`);
+  }
+}
+
+const jonas = new Person('Jonas');
+
+console.log('Jonas' ?? null);
+
+console.log(cart.find(el => el.quantity >= 2));
+Promise.resolve('TEST').then(x => console.log(x));
+
+// 강의에서는 변경된 js파일에 es5형식으로만 작성이 되어서 이걸 어떻게 해보려고 아래 코드를 쓰고 터미널에 npm i core-js를 실행시키는데 지금보니 걍 es6형식으로 변환이 잘 돼서 안 해도 될 듯.. 걍 함
+import 'core-js/stable';
+
+// Polifillng async functions
+// 터미널에 npm i regenerator-runtime
+import 'regenerator-runtime/runtime';
