@@ -1,4 +1,4 @@
-'strict mode';
+'use strict';
 
 const budget = Object.freeze([
   { value: 250, description: 'Sold old TV 📺', user: 'jonas' },
@@ -46,27 +46,44 @@ const newBudget2 = addExpense(
 );
 const newBudget3 = addExpense(newBudget2, spendingLimits, 200, 'Stuff', 'Jay');
 
-const checkExpenses = function (state, limits) {
-  return state.map(entry => {
-    return entry.value < -getLimit(limits, entry.user)
+// const checkExpenses2 = function (state, limits) {
+//   return state.map(entry => {
+//     return entry.value < -getLimit(limits, entry.user)
+//       ? { ...entry, flag: 'limit' }
+//       : entry;
+//   });
+//   // for (const entry of newBudget3) {
+//   //   if (entry.value < -getLimit(limits, entry.user)) entry.flag = 'limit';
+//   // }
+// };
+
+// checkExpenses2를 더 간단히 한 모습
+const checkExpenses = (state, limits) =>
+  state.map(entry =>
+    entry.value < -getLimit(limits, entry.user)
       ? { ...entry, flag: 'limit' }
-      : entry;
-  });
-  // for (const entry of newBudget3) {
-  //   if (entry.value < -getLimit(limits, entry.user)) entry.flag = 'limit';
-  // }
-};
+      : entry
+  );
+
 const finalBudget = checkExpenses(newBudget3, spendingLimits);
 console.log(finalBudget);
 
-const logBigExpenses = function (BigLimit) {
-  let output = '';
-  for (const entry of budget)
-    output +=
-      entry.value <= -BigLimit ? `${entry.description.slice(-2)} / ` : '';
+const logBigExpenses = function (state, bigLimit) {
+  const bigExpenses = state
+    .filter(entry => entry.value <= -bigLimit)
+    .map(entry => entry.description.slice(-2))
+    .join(' / ');
+  // .reduce((str, cur) => `${str} / ${cur.description.slice(-2)}`, '');
 
-  output = output.slice(0, -2); // Remove last '/ '
-  console.log(output);
+  console.log(bigExpenses);
+
+  // let output = '';
+  // for (const entry of budget)
+  //   output +=
+  //     entry.value <= -bigLimit ? `${entry.description.slice(-2)} / ` : '';
+
+  // output = output.slice(0, -2); // Remove last '/ '
+  // console.log(output);
 };
 
-logBigExpenses(500);
+logBigExpenses(finalBudget, 500);
